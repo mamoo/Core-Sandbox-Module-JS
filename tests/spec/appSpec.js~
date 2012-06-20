@@ -1,0 +1,33 @@
+describe("App.Core", function() {
+
+  beforeEach(function() {
+
+  });
+
+  it("should be able to register a module", function() {
+    var module = function (sb){
+      return {
+        init: function(){},
+        destroy: function(){}        
+      };
+    };
+
+    spyOn(App.Core, 'register');
+    App.Core.register('module', module);
+    expect(App.Core.register).toHaveBeenCalled();
+  });
+
+  it("should be able to start a single module", function() {
+	    module = function (sb){
+		  return {
+			init: function(){},
+			destroy: function(){}        
+		  };
+		};
+		spyOn(window,'module').andCallThrough();
+    
+		App.Core.register('module', module);
+		App.Core.startAll();
+		expect(module).toHaveBeenCalled();
+  });  
+});
