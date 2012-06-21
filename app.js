@@ -81,13 +81,14 @@ Core = function(_$) {
 		},
 		publish: function(message, args) {
 			try {
-					_utilities.each(cache[message], function() {
-						if (args instanceof Array) {
-							this.apply(this, args || []);
-						} else {
-							this.apply(this, [args]);
+					var i;
+					for (i = 0; i < cache[message].length; i++) {
+						if (typeof args === "undefined") { args = []; }
+						if (!(args instanceof Array)) {
+							args = [args];
 						}
-					});
+						cache[message][i].apply(this, args);
+					};
 			} catch (err) {
 				console.log(err);
 			}
