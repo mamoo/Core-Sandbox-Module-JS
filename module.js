@@ -1,25 +1,27 @@
 Module = Class.extend((function(){
 	var _init = function(sandbox, options){
-			if (!sandbox || !(sandbox instanceof Sandbox)) throw new TypeError("Sandbox");
-			this.sandbox = sandbox;
-		},
-		_initCallbacks = function(sandbox, options, callbacks){
-			if (!options || !options.subscribesTo) {
-				return;
-			}
-			var i;
-			for (i = 0; i < options.subscribesTo.length; i++){
-				var message = options.subscribesTo[i];
-				if (typeof callbacks[message] === "undefined"){
-					throw new ReferenceError();					
+		if (!sandbox || !(sandbox instanceof Sandbox)) throw new TypeError("Sandbox");
+		this.sandbox = sandbox;
+	},
+	_initSubscribedMessagesCallbacks = function(sandbox, subscribesTo){
+		if (typeof subscribesTo === "undefined") return; 
+		for (var callback in subscribesTo){
+	    		if (subscribesTo.hasOwnProperty(callback)) {                
+				if (typeof subscribesTo[callback] !== "function"){
+					throw new TypeError(callback + "is not a function");					
 				}
-				sandbox.subscribe(message, callbacks[message]);
-			}			
-		};
+				sandbox.subscribe(callback, subscribesTo[callback]);
+	    		}
+		}			
+	};
+
 	return {
 		initialize: function(sandbox, options){
+			if (typeof this.init === "function") {
+				this.init(sandbox, options);
+			}
 			_init(sandbox, options);
-			_initCallbacks(sandbox, options, this.callbacks || {});
+			_initSubscribedMessagesCallbacks(sandbox, this.subscribesTo || {});
 		}
 	}
 })());
