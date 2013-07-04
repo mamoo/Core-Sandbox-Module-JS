@@ -19,8 +19,10 @@
 		</div>
 	</body>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>	
+	<script type="text/javascript" src="../lib/inheritance.js"></script>
 	<script type="text/javascript" src="../app.js"></script>
 	<script type="text/javascript">
+
 		/**
 		* This module manages Item adding module management.
 		* 
@@ -28,13 +30,14 @@
 		* @requires a sandbox object
 		* @param {object} sandbox The sandbox is injected by the EM.Core object when the module is registered.
 		*/
+
 		var AddItemModule = function(sb) {
-			var inputField = sb.DOM.find('#addItemWidget input'),
-				addItemButton = sb.DOM.find('#addItemWidget a');
+			var inputField = sb.dom.find('#addItemWidget input'),
+				addItemButton = sb.dom.find('#addItemWidget a');
 
 			function _notifyActionCallback() { 
 				sb.publish('addItem', inputField.val()); 
-			}
+            }
 
 		    return {
 		        init: function() {
@@ -51,10 +54,11 @@
 		* @requires a sandbox object
 		* @param {object} sandbox The sandbox is injected by the EM.Core object when the module is registered.
 		*/
+
 		var ListItemModule = function(sb){
-			var list = sb.DOM.find('#listItemsWidget ul')
+			var list = sb.dom.find('#listItemsWidget ul')
 			function _addItemCallback(item) {
-				sb.DOM.wrap('<li>' + item + '</li>').appendTo(list);
+				sb.dom.wrap('<li>' + item + '</li>').appendTo(list);
 			}
 
 			return {
@@ -64,6 +68,9 @@
 				destroy: function(){}
 			};
 		};
+
+        var App = App || {};
+        App.Core = Core;
 		App.Core.register('AddItemModule', AddItemModule);
 		App.Core.register('ListItemModule', ListItemModule);
 

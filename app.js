@@ -57,7 +57,8 @@ Core = function(_$) {
 		start: function(moduleId) {
 			console.log("Starting " + moduleId);
 			moduleData[moduleId].instance = new moduleData[moduleId].creator(new Sandbox(this), moduleData[moduleId].options);
-		},
+		    moduleData[moduleId].instance.init();
+        },
 		stop: function(moduleId) {
 			var data = moduleData[moduleId];
 			if (data.instance) {
@@ -66,8 +67,11 @@ Core = function(_$) {
 			}
 		},
 		startAll: function() {
+            console.log('start all');
+            console.log(moduleData);
 			for (var moduleId in moduleData) {
 				if (moduleData.hasOwnProperty(moduleId)) {
+                    console.log(moduleId);
 					this.start(moduleId);
 				}
 			}
