@@ -23,7 +23,10 @@
 	<script type="text/javascript" src="../app.js"></script>
 	<script type="text/javascript">
 
-		/**
+        var App = App || {};
+		App.Modules = App.Modules || {};
+        
+        /**
 		* This module manages Item adding module management.
 		* 
 		* @constructor
@@ -31,7 +34,7 @@
 		* @param {object} sandbox The sandbox is injected by the EM.Core object when the module is registered.
 		*/
 
-		var AddItemModule = function(sb) {
+		App.Modules.AddItemModule = function(sb) {
 			var inputField = sb.dom.find('#addItemWidget input'),
 				addItemButton = sb.dom.find('#addItemWidget a');
 
@@ -40,7 +43,7 @@
             }
 
 		    return {
-		        init: function() {
+		        create: function() {
 	        		addItemButton.bind('click', _notifyActionCallback);
 		        },
 		        destroy: function() { }
@@ -55,24 +58,22 @@
 		* @param {object} sandbox The sandbox is injected by the EM.Core object when the module is registered.
 		*/
 
-		var ListItemModule = function(sb){
+		App.Modules.ListItemModule = function(sb){
 			var list = sb.dom.find('#listItemsWidget ul')
 			function _addItemCallback(item) {
 				sb.dom.wrap('<li>' + item + '</li>').appendTo(list);
 			}
 
 			return {
-				init: function(){
+				create: function(){
 					sb.subscribe('addItem', _addItemCallback);
 				},
 				destroy: function(){}
 			};
 		};
 
-        var App = App || {};
-        App.Core = Core;
-		App.Core.register('AddItemModule', AddItemModule);
-		App.Core.register('ListItemModule', ListItemModule);
+		App.Core.register('AddItemModule', App.Modules.AddItemModule);
+		App.Core.register('ListItemModule', App.Modules.ListItemModule);
 
 		App.Core.startAll();
 	</script>
