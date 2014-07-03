@@ -1,4 +1,6 @@
-﻿/* 
+﻿var App = App || {};
+
+/* 
 * CORE-SANDBOX-MODULE Pattern implementation
 * see readme.md for references.
 */
@@ -7,7 +9,8 @@
 * @description Sandbox object, the API of this object is available to modules.
 *              see readme.md for reference.
 */
-Sandbox = Class.extend({
+
+App.Sandbox = Class.extend({
 	initialize: function(core) {
 		this.publish = core.publish;
 		this.subscribe = core.subscribe;
@@ -22,7 +25,8 @@ Sandbox = Class.extend({
 * @static
 * @param {object} base: base library (jquery is used here).
 */
-Core = function(_$) {
+
+App.Core = function(_$) {
 	var moduleData = {},
 		cache = {}, 
 		_dom = {
@@ -56,8 +60,9 @@ Core = function(_$) {
 		 */
 		start: function(moduleId) {
 			console.log("Starting " + moduleId);
-			moduleData[moduleId].instance = new moduleData[moduleId].creator(new Sandbox(this), moduleData[moduleId].options);
-		},
+			moduleData[moduleId].instance = new moduleData[moduleId].creator(new App.Sandbox(this), moduleData[moduleId].options);
+		    moduleData[moduleId].instance.create();
+        },
 		stop: function(moduleId) {
 			var data = moduleData[moduleId];
 			if (data.instance) {

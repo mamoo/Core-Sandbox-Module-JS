@@ -19,25 +19,31 @@
 		</div>
 	</body>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>	
+	<script type="text/javascript" src="../lib/inheritance.js"></script>
 	<script type="text/javascript" src="../app.js"></script>
 	<script type="text/javascript">
-		/**
+
+        var App = App || {};
+		App.Modules = App.Modules || {};
+        
+        /**
 		* This module manages Item adding module management.
 		* 
 		* @constructor
 		* @requires a sandbox object
 		* @param {object} sandbox The sandbox is injected by the EM.Core object when the module is registered.
 		*/
-		var AddItemModule = function(sb) {
-			var inputField = sb.DOM.find('#addItemWidget input'),
-				addItemButton = sb.DOM.find('#addItemWidget a');
+
+		App.Modules.AddItemModule = function(sb) {
+			var inputField = sb.dom.find('#addItemWidget input'),
+				addItemButton = sb.dom.find('#addItemWidget a');
 
 			function _notifyActionCallback() { 
 				sb.publish('addItem', inputField.val()); 
-			}
+            }
 
 		    return {
-		        init: function() {
+		        create: function() {
 	        		addItemButton.bind('click', _notifyActionCallback);
 		        },
 		        destroy: function() { }
@@ -51,21 +57,23 @@
 		* @requires a sandbox object
 		* @param {object} sandbox The sandbox is injected by the EM.Core object when the module is registered.
 		*/
-		var ListItemModule = function(sb){
-			var list = sb.DOM.find('#listItemsWidget ul')
+
+		App.Modules.ListItemModule = function(sb){
+			var list = sb.dom.find('#listItemsWidget ul')
 			function _addItemCallback(item) {
-				sb.DOM.wrap('<li>' + item + '</li>').appendTo(list);
+				sb.dom.wrap('<li>' + item + '</li>').appendTo(list);
 			}
 
 			return {
-				init: function(){
+				create: function(){
 					sb.subscribe('addItem', _addItemCallback);
 				},
 				destroy: function(){}
 			};
 		};
-		App.Core.register('AddItemModule', AddItemModule);
-		App.Core.register('ListItemModule', ListItemModule);
+
+		App.Core.register('AddItemModule', App.Modules.AddItemModule);
+		App.Core.register('ListItemModule', App.Modules.ListItemModule);
 
 		App.Core.startAll();
 	</script>
